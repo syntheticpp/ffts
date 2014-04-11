@@ -35,7 +35,7 @@
 #include <fftw3.h>
 #include <sfft/sfft.h>
 
-
+#include "../config.h"
 
 #ifdef HAVE_SSE
 #include <xmmintrin.h>
@@ -98,11 +98,11 @@ long sfft_transform (Data* d)
 {
     if (d->in == 0) {
 #ifdef HAVE_SSE
-        float __attribute__ ((aligned(32))) *in = _mm_malloc(2 * d->N * sizeof(float), 32);
-        float __attribute__ ((aligned(32))) *out = _mm_malloc(2 * d->N * sizeof(float), 32);
+        float __attribute__ ((aligned(32))) *in = _mm_malloc(d->N * sizeof(float complex), 32);
+        float __attribute__ ((aligned(32))) *out = _mm_malloc(d->N * sizeof(float complex), 32);
 #else
-        float __attribute__ ((aligned(32))) *in = valloc(2 * d->N * sizeof(float));
-        float __attribute__ ((aligned(32))) *out = valloc(2 * d->N * sizeof(float));
+        float __attribute__ ((aligned(32))) *in = valloc(d->N * sizeof(float complex));
+        float __attribute__ ((aligned(32))) *out = valloc(d->N * sizeof(float complex));
 #endif
         d->in = in;
         d->out = out;
@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
         runs = runs < minRuns ? minRuns : runs;
         double gw = bench(N, "FFTW ", runs, &fftw_transform, &fftw_clean);
         double gs = bench(N, "SFFT ", runs, &sfft_transform, &sfft_clean);
-        printf("N = 2^%2.0f = %7i: Speed %4.1f GigaFLOPS  SFFT/FFTW = %4.2f\n", log2(N), N, gs, gs/gw);
+        printf("N = 2^%2.0f = %7i: Speed %4.1f GFLOPS  SFFT/FFTW = %4.2f\n", log2(N), N, gs, gs/gw);
     }
 
     return 0;
