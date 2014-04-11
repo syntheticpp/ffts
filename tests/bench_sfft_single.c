@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
         runs = runs < minRuns ? minRuns : runs;
         double gw = bench(N, "FFTW ", runs, &fftw_transform, &fftw_clean);
         double gs = bench(N, "SFFT ", runs, &sfft_transform, &sfft_clean);
-        printf("N = 2^%2.0f = %7i: Speed %4.1f GFLOPS  SFFT/FFTW = %4.2f\n", log2(N), N, gs, gs/gw);
+        printf("N = 2^%2.0f = %7i: Speed SFFT = %4.1f GFLOPS  SFFT/FFTW = %4.2f\n", log2(N), N, gs, gs/gw);
     }
 
     return 0;
